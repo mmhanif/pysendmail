@@ -32,7 +32,7 @@ def test_yahoo(sender, pwd):
     hostname = "smtp.mail.yahoo.com"
     port = 25
     sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender,
-             password=pwd, useTLS=False, useSSL=False)
+             password=pwd, use_tls=False, use_ssl=False)
 
 
 def test_yahoo_plus(sender, pwd):
@@ -44,7 +44,7 @@ def test_yahoo_plus(sender, pwd):
     hostname = "plus.smtp.mail.yahoo.com"
     port = 465
     sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender,
-             password=pwd, useTLS=False, useSSL=True)
+             password=pwd, use_tls=False, use_ssl=True)
 
 
 def test_gmail(sender, pwd):
@@ -56,18 +56,18 @@ def test_gmail(sender, pwd):
     hostname = "smtp.gmail.com"
     port = 587
     sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender,
-             password=pwd, useTLS=True, useSSL=False)
+             password=pwd, use_tls=True, use_ssl=False)
 
 
 def test(sender, pwd):
-    print "Testing local output"
+    print("Testing local output")
     test_local_output(sender)
-    # print "Testing Yahoo!"
+    # print("Testing Yahoo!")
     # test_yahoo(sender, pwd)
-    # print "Testing Yahoo! Plus"
+    # print("Testing Yahoo! Plus")
     # test_yahoo_plus(sender, pwd)
-    print "Testing Gmail"
-    test_gmail(sender, pwd)
+    # print("Testing Gmail")
+    # test_gmail(sender, pwd)
 
 
 if __name__ == '__main__':
