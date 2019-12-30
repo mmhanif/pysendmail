@@ -20,11 +20,11 @@ from email.mime.text import MIMEText
 COMMASPACE = ', '
 
 
-def sendmail(sender, recipients, subject, body, paths_to_attachments, cc_recipients=None,
+def sendmail(sender, recipients, subject, body, paths_to_attachments=None, reply_to=None, cc_recipients=None,
              hostname='localhost', port=None, username=None, password=None,
              use_tls=False, use_ssl=False, output=None):
     # Create body of message with attachments
-    composed = _create_msg(sender, recipients, cc_recipients, subject, body, paths_to_attachments)
+    composed = _create_msg(sender, recipients, reply_to, cc_recipients, subject, body, paths_to_attachments)
     
     # Now send or store the message
     if output:
@@ -73,15 +73,18 @@ def _create_attachment(path):
     return msg
 
 
-def _create_msg(sender, recipients, cc_recipients, subject, body, paths):
+def _create_msg(sender, recipients, reply_to, cc_recipients, subject, body, paths):
     # Create the enclosing (outer) message
     outer = MIMEMultipart()
     outer['Subject'] = subject
     outer['To'] = COMMASPACE.join(recipients)
     outer['From'] = sender
+    if reply_to:
+        outer["Reply-To"] = reply_to
     if cc_recipients:
         outer['Cc'] = COMMASPACE.join(cc_recipients)
 
+    paths = paths or []
     for path in paths:
         if not os.path.isfile(path):
             continue
