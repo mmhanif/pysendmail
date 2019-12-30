@@ -8,9 +8,8 @@ Adapted from http://docs.python.org/2/library/email-examples.html
 
 import os
 import smtplib
-# For guessing MIME type based on file name extension
-import mimetypes
-
+import ssl
+import mimetypes  # For guessing MIME type based on file name extension
 from email import encoders
 from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
@@ -99,12 +98,13 @@ def _create_msg(sender, recipients, cc_recipients, subject, body, paths):
 def _send_mail(sender, recipients, cc_recipients, msg_string,
                hostname, port=None, username=None, password=None,
                use_tls=False, use_ssl=False):
-    conn_type = smtplib.SMTP_SSL if use_ssl else smtplib.SMTP
+    conn_type = smtplib.SMTP_SSL if (use_ssl and not use_tls) else smtplib.SMTP
     conn = conn_type(hostname, port) if port else conn_type(hostname)
     conn.set_debuglevel(False)
     if use_tls:
-        conn.ehlo()        
-        conn.starttls()
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS) if use_ssl else None
+        conn.ehlo()
+        conn.starttls(context=context)
         conn.ehlo()
     if username and password:
         conn.login(username, password)

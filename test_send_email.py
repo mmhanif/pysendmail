@@ -7,13 +7,6 @@ Created by Mahmood Hanif
 from send_email import sendmail
 
 
-def main():
-    import sys
-    sender = sys.argv[1]
-    pwd = sys.argv[2]
-    test(sender, pwd)
-
-
 def test_local_output(sender):
     recipients = ["pysendmail.recipient@mailinator.com"]
     cc_recipients = ["pysendmail.cced@mailinator.com"]
@@ -56,18 +49,25 @@ def test_gmail(sender, pwd):
     hostname = "smtp.gmail.com"
     port = 587
     sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender,
-             password=pwd, use_tls=True, use_ssl=False)
+             password=pwd, use_tls=True, use_ssl=True)
 
 
 def test(sender, pwd):
-    print("Testing local output")
-    test_local_output(sender)
+    # print("Testing local output")
+    # test_local_output(sender)
     # print("Testing Yahoo!")
     # test_yahoo(sender, pwd)
     # print("Testing Yahoo! Plus")
     # test_yahoo_plus(sender, pwd)
-    # print("Testing Gmail")
-    # test_gmail(sender, pwd)
+    print("Testing Gmail")
+    test_gmail(sender, pwd)
+
+
+def main():
+    import sys
+    sender = sys.argv[1]
+    pwd = sys.argv[2]
+    test(sender, pwd)
 
 
 if __name__ == '__main__':
