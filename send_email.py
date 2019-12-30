@@ -1,10 +1,7 @@
-#!/usr/bin/env python
-# encoding: utf-8
 """
 email.py
 
-Created by Mahmood Hanif on 2012-11-05.
-Copyright (c) 2012 Teknifi. All rights reserved.
+Created by Mahmood Hanif
 
 Adapted from http://docs.python.org/2/library/email-examples.html
 """
@@ -15,7 +12,6 @@ import smtplib
 import mimetypes
 
 from email import encoders
-from email.message import Message
 from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
@@ -25,9 +21,11 @@ from email.mime.text import MIMEText
 COMMASPACE = ', '
 
 
-def sendmail(sender, recipients, subject, body, pathsToAttachments, cc_recipients=None, hostname='localhost', port=None, username=None, password=None, useTLS=False, useSSL=False, output=None):
+def sendmail(sender, recipients, subject, body, paths_to_attachments, cc_recipients=None,
+             hostname='localhost', port=None, username=None, password=None,
+             use_tls=False, use_ssl=False, output=None):
     # Create body of message with attachments
-    composed = _create_msg(sender, recipients, cc_recipients, subject, body, pathsToAttachments)
+    composed = _create_msg(sender, recipients, cc_recipients, subject, body, paths_to_attachments)
     
     # Now send or store the message
     if output:
@@ -35,8 +33,9 @@ def sendmail(sender, recipients, subject, body, pathsToAttachments, cc_recipient
         fp.write(composed)
         fp.close()
     else:
-        _send_mail(sender, recipients, cc_recipients, composed, hostname, port=port, username=username, password=password, useTLS=useTLS, useSSL=useSSL)
-
+        _send_mail(sender, recipients, cc_recipients, composed,
+                   hostname, port=port, username=username, password=password,
+                   use_tls=use_tls, use_ssl=use_ssl)
 
 
 def _create_attachment(path):
@@ -73,7 +72,8 @@ def _create_attachment(path):
     filename = os.path.basename(path)
     msg.add_header('Content-Disposition', 'attachment', filename=filename)
     return msg
-    
+
+
 def _create_msg(sender, recipients, cc_recipients, subject, body, paths):
     # Create the enclosing (outer) message
     outer = MIMEMultipart()
@@ -89,17 +89,20 @@ def _create_msg(sender, recipients, cc_recipients, subject, body, paths):
         msg = _create_attachment(path)
         outer.attach(msg)
 
-    mainMsg = MIMEText('text', "plain")
-    mainMsg.set_payload(body)
-    outer.attach(mainMsg)
+    main_msg = MIMEText('text', "plain")
+    main_msg.set_payload(body)
+    outer.attach(main_msg)
     
     return outer.as_string()
 
-def _send_mail(sender, recipients, cc_recipients, msgString, hostname, port=None, username=None, password=None, useTLS= False, useSSL=False):
-    connType = smtplib.SMTP_SSL if useSSL else smtplib.SMTP
-    conn = connType(hostname, port) if port else connType(hostname)
+
+def _send_mail(sender, recipients, cc_recipients, msg_string,
+               hostname, port=None, username=None, password=None,
+               use_tls=False, use_ssl=False):
+    conn_type = smtplib.SMTP_SSL if use_ssl else smtplib.SMTP
+    conn = conn_type(hostname, port) if port else conn_type(hostname)
     conn.set_debuglevel(False)
-    if useTLS:
+    if use_tls:
         conn.ehlo()        
         conn.starttls()
         conn.ehlo()
@@ -107,7 +110,7 @@ def _send_mail(sender, recipients, cc_recipients, msgString, hostname, port=None
         conn.login(username, password)
     try:
         all_recipients = recipients + cc_recipients if cc_recipients else recipients
-        conn.sendmail(sender, all_recipients, msgString)
+        conn.sendmail(sender, all_recipients, msg_string)
     finally:
         conn.close()
 

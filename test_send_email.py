@@ -1,16 +1,11 @@
-#!/usr/bin/env python
-# encoding: utf-8
 """
 test_send_email.py
 
-Created by Mahmood Hanif on 2013-09-24.
-Copyright (c) 2013 Teknifi. All rights reserved.
+Created by Mahmood Hanif
 """
 
-import sys
-import os
-
 from send_email import sendmail
+
 
 def main():
     import sys
@@ -27,6 +22,7 @@ def test_local_output(sender):
     body = "This is a test"
     sendmail(sender, recipients, subject, body, paths, cc_recipients, output='./test_local_output.txt')
 
+
 def test_yahoo(sender, pwd):
     recipients = ["pysendmail.recipient@mailinator.com"]
     cc_recipients = ["pysendmail.cced@mailinator.com"]
@@ -35,7 +31,9 @@ def test_yahoo(sender, pwd):
     body = "This is a test"
     hostname = "smtp.mail.yahoo.com"
     port = 25
-    sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender, password=pwd, useTLS=False, useSSL=False)
+    sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender,
+             password=pwd, useTLS=False, useSSL=False)
+
 
 def test_yahoo_plus(sender, pwd):
     recipients = ["pysendmail.recipient@mailinator.com"]
@@ -45,7 +43,9 @@ def test_yahoo_plus(sender, pwd):
     body = "This is a test"
     hostname = "plus.smtp.mail.yahoo.com"
     port = 465
-    sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender, password=pwd, useTLS=False, useSSL=True)
+    sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender,
+             password=pwd, useTLS=False, useSSL=True)
+
 
 def test_gmail(sender, pwd):
     recipients = ["pysendmail.recipient@mailinator.com"]
@@ -55,18 +55,21 @@ def test_gmail(sender, pwd):
     body = "This is a test"
     hostname = "smtp.gmail.com"
     port = 587
-    sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender, password=pwd, useTLS=True, useSSL=False)
+    sendmail(sender, recipients, subject, body, paths, cc_recipients, hostname=hostname, port=port, username=sender,
+             password=pwd, useTLS=True, useSSL=False)
+
 
 def test(sender, pwd):
     print "Testing local output"
     test_local_output(sender)
-    #print "Testing Yahoo!"
-    #test_yahoo(sender, pwd)
-    #print "Testing Yahoo! Plus"
-    #test_yahoo_plus(sender, pwd)
+    # print "Testing Yahoo!"
+    # test_yahoo(sender, pwd)
+    # print "Testing Yahoo! Plus"
+    # test_yahoo_plus(sender, pwd)
     print "Testing Gmail"
     test_gmail(sender, pwd)
-    
+
+
 if __name__ == '__main__':
     main()
 
